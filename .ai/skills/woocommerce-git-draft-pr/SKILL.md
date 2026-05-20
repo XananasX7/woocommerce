@@ -53,9 +53,9 @@ Extract issue/PR refs from commits and branch name:
 - **Changes proposed**: 2-3 sentences. Lead with WHY, then WHAT. No filler ("This PR addresses..."). Drop the `Closes # .` line if you don't have a GitHub issue ref. Drop the `Bug introduced in PR # .` line if not a bug fix or origin PR unknown.
 - **Milestone**: tick the auto-assign box only for plugin-affecting changes. The section itself stays — the template marks it do-not-remove.
 - **Changelog entry**:
-  - Plugin-affecting, no changelog files in the diff → tick `Automatically create` with Significance, Type, and a user-facing Message.
-  - Plugin-affecting with changelog files already in the diff → tick `does not require` with the Comment "Created manually."
-  - Not plugin-affecting → tick `does not require` with a Comment explaining why (e.g., "Internal tooling, not shipped to merchants").
+    - Plugin-affecting, no changelog files in the diff → tick `Automatically create` with Significance, Type, and a user-facing Message.
+    - Plugin-affecting with changelog files already in the diff → tick `does not require` with the Comment "Created manually."
+    - Not plugin-affecting → tick `does not require` with a Comment explaining why (e.g., "Internal tooling, not shipped to merchants").
 - **Release Communication**: tick `Feature Highlight` for user-visible features merchants will notice, or `Developer Advisory` for changes affecting extension/theme developers (hook signatures, deprecations, REST API field changes). Otherwise leave both unchecked.
 
 After filling, strip all HTML comments (`<!-- -->`) and any placeholder lines (e.g., `Closes # .`) that weren't filled.

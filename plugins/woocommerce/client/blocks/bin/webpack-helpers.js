@@ -103,8 +103,37 @@ const getAlias = ( options = {} ) => {
 			__dirname,
 			`../assets/js/entities/`
 		),
-		'react/jsx-dev-runtime': require.resolve( 'react/jsx-dev-runtime' ),
-		'react/jsx-runtime': require.resolve( 'react/jsx-runtime' ),
+		// Resolve bundled workspace packages to source so transpilation happens
+		// as part of this webpack run, eliminating the build cascade. `$`
+		// restricts to exact bare-name imports so deep imports still resolve
+		// against the package root.
+		'@woocommerce/tracks$': path.resolve(
+			__dirname,
+			'../../../../../packages/js/tracks/src'
+		),
+		'@woocommerce/tracks': path.resolve(
+			__dirname,
+			'../../../../../packages/js/tracks'
+		),
+		// `sanitize` is externalized in script-based blocks (window.wc.sanitize),
+		// but interactivity (ES module) blocks bundle it inline. Alias to source
+		// so those configs can resolve without a pre-built artifact.
+		'@woocommerce/sanitize$': path.resolve(
+			__dirname,
+			'../../../../../packages/js/sanitize/src'
+		),
+		'@woocommerce/sanitize': path.resolve(
+			__dirname,
+			'../../../../../packages/js/sanitize'
+		),
+		'@woocommerce/email-editor$': path.resolve(
+			__dirname,
+			'../../../../../packages/js/email-editor/src'
+		),
+		'@woocommerce/email-editor': path.resolve(
+			__dirname,
+			'../../../../../packages/js/email-editor'
+		),
 	};
 };
 

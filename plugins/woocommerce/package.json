@@ -10,17 +10,12 @@
 	},
 	"license": "GPL-2.0-or-later",
 	"scripts": {
-		"build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"$npm_package_name...\" '/^build:project:.*$/'",
-		"build:admin": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"@woocommerce/admin-library...\" --filter=\"$npm_package_name\" '/^build:project:.*$/'",
-		"build:blocks": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"@woocommerce/block-library...\" --filter=\"$npm_package_name\" '/^build:project:.*$/'",
-		"build:classic-assets": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"@woocommerce/classic-assets...\" --filter=\"$npm_package_name\" '/^build:project:.*$/'",
+		"build": "pnpm build:project",
 		"build:zip": "./bin/build-zip.sh",
-		"build:project": "pnpm --if-present '/^build:project:.*$/'",
-		"build:project:copy-assets:legacy": "rsync -avhW --checksum --delete --quiet client/legacy/build/css/ assets/css && rsync -avhW --checksum --delete --quiet client/legacy/build/js/ assets/js",
-		"build:project:copy-assets:admin": "rsync -avhW --checksum --delete --quiet client/admin/build/ assets/client/admin",
-		"build:project:copy-assets:blocks": "rsync -avhW --checksum --delete --quiet client/blocks/build/ assets/client/blocks && wp-scripts build-blocks-manifest --input=assets/client/blocks --output=assets/client/blocks/blocks-json.php",
-		"build:project:copy-assets:email-editor": "rsync -avhW --checksum --delete --quiet ../../packages/php/email-editor/src/ packages/email-editor/src",
-		"build:project:copy-assets:blueprint": "rsync -avhW --checksum --delete --quiet ../../packages/php/blueprint/src/ packages/blueprint/src",
+		"build:project": "pnpm --stream '/^build:project:.*$/'",
+		"build:project:admin": "pnpm --filter='@woocommerce/admin-library' build:project",
+		"build:project:blocks": "pnpm --filter='@woocommerce/block-library' build:project",
+		"build:project:classic-assets": "pnpm --filter='@woocommerce/classic-assets' build:project",
 		"build:project:actualize-translation-domains": "wireit",
 		"build:api": "php src/Internal/Api/DesignTime/Scripts/build-api.php",
 		"build:api:check": "php src/Internal/Api/DesignTime/Scripts/check-api-staleness.php",
@@ -95,12 +90,11 @@
 		"test:unit:env": "pnpm test:php:env",
 		"test:unit:env:watch": "pnpm test:php:env:watch",
 		"update-wp-env": "php ./tests/e2e-pw/bin/update-wp-env.php",
-		"watch:build": "pnpm --if-present --workspace-concurrency=Infinity --filter=\"$npm_package_name...\" --parallel '/^watch:build:project:.*$/'",
-		"watch:build:admin": "pnpm --if-present --workspace-concurrency=Infinity --filter=\"@woocommerce/admin-library...\" --filter=\"$npm_package_name\" --parallel '/^watch:build:project:.*$/'",
-		"watch:build:blocks": "pnpm --if-present --workspace-concurrency=Infinity --filter=\"@woocommerce/block-library...\" --filter=\"$npm_package_name\" --parallel '/^watch:build:project:.*$/'",
-		"watch:build:classic-assets": "pnpm --if-present --workspace-concurrency=Infinity --filter=\"@woocommerce/classic-assets...\" --filter=\"$npm_package_name\" --parallel '/^watch:build:project:.*$/'",
-		"watch:build:project": "pnpm --if-present run '/^watch:build:project:.*$/'",
-		"watch:build:project:copy-assets": "wireit",
+		"watch:build": "pnpm watch:build:project",
+		"watch:build:project": "pnpm --stream '/^watch:build:project:.*$/'",
+		"watch:build:project:admin": "pnpm --filter='@woocommerce/admin-library' watch:build:project",
+		"watch:build:project:blocks": "pnpm --filter='@woocommerce/block-library' watch:build:project",
+		"watch:build:project:classic-assets": "pnpm --filter='@woocommerce/classic-assets' watch:build:project",
 		"wp-env": "wp-env"
 	},
 	"lint-staged": {
@@ -984,10 +978,6 @@
 				"packages/woocommerce-admin/woocommerce-admin.php"
 			],
 			"output": []
-		},
-		"watch:build:project:copy-assets": {
-			"command": "nodemon --exec \"pnpm build:project\"",
-			"service": true
 		},
 		"dependencyOutputs": {
 			"allowUsuallyExcludedPaths": true,

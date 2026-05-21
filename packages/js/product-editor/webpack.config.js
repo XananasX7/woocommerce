@@ -53,7 +53,12 @@ module.exports = {
 		new RemoveEmptyScriptsPlugin(),
 		new plugin( {
 			filename: ( data ) => {
-				return data.chunk.name.startsWith( '/build/blocks' )
+				// The standalone build uses `/build/blocks/...` entry names;
+				// when composed into admin's build the entry names are
+				// re-prefixed to `<pkg>/blocks/...`. Match either shape.
+				return /(?:^\/build\/blocks|\/blocks\/)/.test(
+					data.chunk.name
+				)
 					? `[name].css`
 					: `[name]/style.css`;
 			},
@@ -63,7 +68,7 @@ module.exports = {
 		new CopyWebpackPlugin( {
 			patterns: [
 				{
-					from: './src/**/block.json',
+					from: path.resolve( __dirname, 'src/**/block.json' ),
 					to( { absoluteFilename } ) {
 						const blockMetaData = getBlockMetaData(
 							path.resolve( __dirname, absoluteFilename )

@@ -13,10 +13,8 @@ const TerserPlugin = require( 'terser-webpack-plugin' );
  */
 const FilesystemCacheWarningsPlugin = require( './filesystem-cache-warnings-webpack-plugin.js' );
 const { getProgressBarPluginConfig } = require( './webpack-helpers' );
+const { BUILD_DIR, ROOT_DIR } = require( './build-paths' );
 
-const ROOT_DIR = path.resolve( __dirname, '../../../../../' );
-// Output to the standard blocks build directory (gitignored).
-const BUILD_DIR = path.resolve( __dirname, '../build/' );
 const BABEL_CACHE_DIR = path.join(
 	ROOT_DIR,
 	'node_modules/.cache/babel-loader'

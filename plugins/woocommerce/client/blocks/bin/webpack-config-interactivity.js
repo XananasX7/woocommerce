@@ -10,9 +10,9 @@ const { DefinePlugin } = require( 'webpack' );
 const DependencyExtractionWebpackPlugin = require( '@woocommerce/dependency-extraction-webpack-plugin' );
 const FilesystemCacheWarningsPlugin = require( './filesystem-cache-warnings-webpack-plugin.js' );
 const { sharedOptimizationConfig } = require( './webpack-shared-config' );
+const { BUILD_DIR, ROOT_DIR } = require( './build-paths' );
 
 const { NODE_ENV: mode = 'development' } = process.env;
-const ROOT_DIR = path.resolve( __dirname, '../../../../../' );
 const BABEL_CACHE_DIR = path.join(
 	ROOT_DIR,
 	'node_modules/.cache/babel-loader'
@@ -44,7 +44,7 @@ module.exports = {
 		library: {
 			type: 'module',
 		},
-		path: path.resolve( __dirname, '../build/' ),
+		path: BUILD_DIR,
 		asyncChunks: false,
 		chunkFormat: 'module',
 		environment: { module: true },

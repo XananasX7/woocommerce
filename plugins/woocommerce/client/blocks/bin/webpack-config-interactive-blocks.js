@@ -16,6 +16,7 @@ const DependencyExtractionWebpackPlugin = require( '@woocommerce/dependency-extr
 const FilesystemCacheWarningsPlugin = require( './filesystem-cache-warnings-webpack-plugin.js' );
 const { WebpackRTLPlugin } = require( '@woocommerce/internal-style-build' );
 const { sharedOptimizationConfig } = require( './webpack-shared-config' );
+const { BUILD_DIR } = require( './build-paths' );
 const {
 	scriptModuleEntries,
 	styleEntries,

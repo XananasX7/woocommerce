@@ -189,8 +189,6 @@ const webpackConfig = {
 		extensions: [ '.json', '.js', '.jsx', '.ts', '.tsx' ],
 		alias: {
 			'~': path.resolve( __dirname + '/client' ),
-			'react/jsx-dev-runtime': require.resolve( 'react/jsx-dev-runtime' ),
-			'react/jsx-runtime': require.resolve( 'react/jsx-runtime' ),
 		},
 	},
 	plugins: [
@@ -252,12 +250,6 @@ const webpackConfig = {
 							// Use WordPress core's window.moment (which includes moment-timezone)
 							// instead of bundling a stripped copy.
 							return 'moment';
-						case 'react/jsx-runtime':
-						case 'react/jsx-dev-runtime':
-							// @wordpress/dependency-extraction-webpack-plugin version bump related, which added 'react-jsx-runtime' dependency.
-							// See https://github.com/WordPress/gutenberg/pull/61692 for more details about the dependency in general.
-							// For backward compatibility reasons we need to skip requesting to external here.
-							return null;
 						case '@wordpress/global-styles-engine':
 							// @wordpress/global-styles-engine is not a standard WordPress package available globally,
 							// so we need to bundle it instead of treating it as an external.

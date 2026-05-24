@@ -102,20 +102,37 @@ test.describe( 'Product Collection: Register Product Collection', () => {
 		admin,
 		page,
 	} ) => {
-		await admin.createNewPost();
-		await editor.insertBlockUsingGlobalInserter( pageObject.BLOCK_NAME );
-		await editor.canvas
-			.getByRole( 'button', {
-				name: 'Choose collection',
-			} )
-			.click();
-
 		// This viewport size is required to ensure that the selectors are visible.
 		// For smaller viewports, a different DOM structure is rendered, which may cause the selectors to be hidden or not interactable.
 		await page.setViewportSize( {
 			width: 1920,
 			height: 1080,
 		} );
+
+		await admin.createNewPost();
+		await editor.insertBlockUsingGlobalInserter( pageObject.BLOCK_NAME );
+		await pageObject.dismissBlockEditorCardPopover();
+
+		const placeholderSelector = editor.canvas.locator(
+			SELECTORS.collectionPlaceholder
+		);
+		const inserter = placeholderSelector.locator(
+			'.wc-blocks-product-collection__collections-grid, .wc-blocks-product-collection__collections-dropdown'
+		);
+
+		await inserter.waitFor( { state: 'visible' } );
+
+		const isDropdown = ( await inserter.getAttribute( 'class' ) )?.includes(
+			'wc-blocks-product-collection__collections-dropdown'
+		);
+
+		if ( isDropdown ) {
+			await placeholderSelector
+				.getByRole( 'button', {
+					name: 'Choose collection',
+				} )
+				.click();
+		}
 
 		for ( const myCollection of Object.values(
 			MY_REGISTERED_COLLECTIONS

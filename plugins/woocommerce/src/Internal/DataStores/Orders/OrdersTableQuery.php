@@ -833,12 +833,10 @@ class OrdersTableQuery {
 
 		$orders_table = $this->tables['orders'];
 
-		if ( ! empty( $this->join ) ) {
-			// GROUP BY is often more efficient than DISTINCT when selecting only IDs.
-			$this->groupby[] = "{$this->tables['orders']}.id";
-		}
-		$this->fields = "{$orders_table}.id";
-		$fields       = $this->fields;
+		// GROUP BY is often more efficient than DISTINCT when selecting only IDs.
+		$this->groupby[] = "{$this->tables['orders']}.id";
+		$this->fields    = "{$orders_table}.id";
+		$fields          = $this->fields;
 
 		// JOIN.
 		$join = implode( ' ', array_unique( array_filter( array_map( 'trim', $this->join ) ) ) );
@@ -896,15 +894,19 @@ class OrdersTableQuery {
 			$groupby = $clauses['groupby'] ?? '';
 			$orderby = $clauses['orderby'] ?? '';
 			$limits  = $clauses['limits'] ?? '';
-
-			if ( ! empty( $join ) && empty( $groupby ) ) {
-				// GROUP BY is often more efficient than DISTINCT when selecting only IDs.
-				$groupby = "{$orders_table}.id";
-			}
 		}
 
 		$groupby = $groupby ? ( 'GROUP BY ' . $groupby ) : '';
 		$orderby = $orderby ? ( 'ORDER BY ' . $orderby ) : '';
+
+		// Performance note: simplify the query to allow the query optimizer to select a more efficient execution plan.
+		// As of version 10.9, this logic is implemented here as changes above are getting flagged by regression analysis.
+		if ( '' === $join && "{$orders_table}.id" === $fields) {
+			$groupby = '';
+		}
+		if ( $limits === sprintf( 'LIMIT 0, %d', self::MYSQL_MAX_UNSIGNED_BIGINT ) ) {
+			$limits = '';
+		}
 
 		$this->sql = "SELECT $fields FROM $orders_table $join WHERE $where $groupby $orderby $limits";
 

@@ -833,7 +833,7 @@ class OrdersTableQuery {
 
 		$orders_table = $this->tables['orders'];
 
-		// GROUP BY is often more efficient than DISTINCT when selecting only IDs.
+		// Group by is a faster substitute for DISTINCT, as long as we are only selecting IDs. MySQL don't like it when we join tables and use DISTINCT.
 		$this->groupby[] = "{$this->tables['orders']}.id";
 		$this->fields    = "{$orders_table}.id";
 		$fields          = $this->fields;
@@ -899,8 +899,8 @@ class OrdersTableQuery {
 		$groupby = $groupby ? ( 'GROUP BY ' . $groupby ) : '';
 		$orderby = $orderby ? ( 'ORDER BY ' . $orderby ) : '';
 
-		// Performance note: simplify the query to allow the query optimizer to select a more efficient execution plan.
-		// As of version 10.9, this logic is implemented here as changes above are getting flagged by regression analysis.
+		// Performance note: simplify the query to allow the query optimizer to select a more efficient execution plan. As of
+		// version 10.9, this logic is implemented here as alternative changes above are getting flagged by regression analysis.
 		if ( '' === $join && "{$orders_table}.id" === $fields) {
 			$groupby = '';
 		}

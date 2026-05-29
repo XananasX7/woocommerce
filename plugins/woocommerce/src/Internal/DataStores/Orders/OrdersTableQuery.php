@@ -898,6 +898,11 @@ class OrdersTableQuery {
 			$limits  = $clauses['limits'] ?? '';
 		}
 
+		if ( ! empty( $join ) && empty( $groupby ) ) {
+			// GROUP BY is often more efficient than DISTINCT when selecting only IDs.
+			$groupby = "{$orders_table}.id";
+		}
+
 		$groupby = $groupby ? ( 'GROUP BY ' . $groupby ) : '';
 		$orderby = $orderby ? ( 'ORDER BY ' . $orderby ) : '';
 

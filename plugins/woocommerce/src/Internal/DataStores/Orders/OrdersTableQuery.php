@@ -901,7 +901,7 @@ class OrdersTableQuery {
 
 		// Performance note: simplify the query to allow the query optimizer to select a more efficient execution plan. As of
 		// version 10.9, this logic is implemented here as alternative changes above are getting flagged by regression analysis.
-		if ( '' === $join && "{$orders_table}.id" === $fields) {
+		if ( '' === $join && "{$orders_table}.id" === $fields ) {
 			$groupby = '';
 		}
 		if ( $limits === sprintf( 'LIMIT 0, %d', self::MYSQL_MAX_UNSIGNED_BIGINT ) ) {

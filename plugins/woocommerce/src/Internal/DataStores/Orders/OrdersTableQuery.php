@@ -904,7 +904,7 @@ class OrdersTableQuery {
 		if ( '' === $join && "{$orders_table}.id" === $fields ) {
 			$groupby = '';
 		}
-		if ( $limits === sprintf( 'LIMIT 0, %d', self::MYSQL_MAX_UNSIGNED_BIGINT ) ) {
+		if ( 'LIMIT 0, ' . self::MYSQL_MAX_UNSIGNED_BIGINT === $limits ) {
 			$limits = '';
 		}
 
